@@ -19,6 +19,13 @@ lwage = beta0 + theta jc + beta2(jc+univ) + beta3exper
 So create variable 
 total_university = (jc + univ)*/
 
+/*lwage = Beta0 + Beta1jc + Beta2Uni + Beta3exp
+Ho: Beta1-Beta2 = 0
+Ha: Beta1-Beta2 != 0
+also
+Theta = Beta1-Beta2
+*/
+
 data f.twoyear_update;
 set f.twoyear;
 total_university = jc + univ;
@@ -51,10 +58,13 @@ run;
 proc reg data=f.mlb1;
 model lsalary = years gamesyr bavg hrunsyr rbisyr;
 run;
+/*
+Ha: bavg - hrunsyr - rbisyr = 0
+Ha: bavg - hrunsyr - rbisyr != 0*/
 
 /*The SSR of the unrestricted model is 183.186 */
 
-/* The F-Stastitic is (198.311-183.186/ 183.186) * (347/3 = 9.55 */
+/* The F-Stastitic is (198.311-183.186/ 183.186) * (347("n-k-1")/3 = 9.55 */
 data f.question5;
 F_critical = FINV(.95, 3, 347);
 proc print; run;
@@ -66,6 +76,10 @@ model lsalary = years gamesyr bavg hrunsyr rbisyr;
 test bavg=hrunsyr=rbisyr=0;
 run;
 
+/*
+variable inflation factor
+if Condtition index is greater than 10, then very high corellation
+*/
 proc reg data=f.mlb1;
 model lsalary = years gamesyr bavg hrunsyr rbisyr / tol  collin vif;
 run;
